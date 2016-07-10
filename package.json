@@ -1,6 +1,6 @@
 {
   "name": "cfn-reducer",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "CloudFormation template reducer",
   "keywords": [
     "cloudformation"
@@ -19,5 +19,10 @@
     "tap-dot": "1.0.5",
     "tap-spec": "4.1.1",
     "tape": "4.6.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/khueue/cfn-reducer.git"
+  },
+  "author": "Sebastian Lundström <khueue@gmail.com>"
 }
