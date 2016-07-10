@@ -17,7 +17,7 @@ version control.
 ## Install
 
 ```bash
-npm install cfn-reducer
+$ npm install cfn-reducer
 ```
 
 
@@ -70,5 +70,6 @@ that all transformations are done recursively, until nothing more can be reduced
 
 ## Todo
 
+- Reduction trace
 - Integrate substacks?
 - Strip unused mappings/conditions/[...]?
