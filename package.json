@@ -1,6 +1,6 @@
 {
   "name": "cfn-reducer",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "CloudFormation template reducer",
   "keywords": [
     "cloudformation"
@@ -16,6 +16,8 @@
     "cov": "npm run lint && istanbul cover --dir ./test/coverage ./test/index.js | tap-spec"
   },
   "dependencies": {
+  },
+  "devDependencies": {
     "eslint": "3.0.1",
     "istanbul": "0.4.4",
     "require-dir": "0.3.0",

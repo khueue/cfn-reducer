@@ -8,7 +8,7 @@ var CfnReducer = require('../src/CfnReducer');
 
 var file = process.argv[2];
 if (!file) {
-	console.error('Usage: cfn-reducer.js <in.template> [Param1=Value1 ...]');
+	console.error('Usage: cfn-reducer <in.template> [Param1=Value1 ...]');
 	process.exit(1);
 }
 var template = JSON.parse(fs.readFileSync(file));

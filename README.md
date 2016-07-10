@@ -24,7 +24,7 @@ npm install cfn-reducer
 The command line reducer accepts a path to a CloudFormation template and optional key-value pairs of stack parameters. Output goes to stdout and can be redirected to a file.
 
 ```bash
-./node_modules/bin/cfn-reducer.js \
+$ ./node_modules/bin/cfn-reducer \
 	MyTemplate.template \
 		MyParam1=some-value-1 \
 		MyParam2=some-value-2 \
