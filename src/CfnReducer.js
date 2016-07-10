@@ -58,6 +58,8 @@ var CfnReducer = function (template, stackParams) {
 				return self.reduceFnFindInMap(node);
 			case 'Fn::If':
 				return self.reduceFnIf(node);
+			case 'Fn::Join':
+				return self.reduceFnJoin(node);
 			case 'Fn::Select':
 				return self.reduceFnSelect(node);
 			case 'Ref':
@@ -107,6 +109,19 @@ var CfnReducer = function (template, stackParams) {
 			} else {
 				return args[2];
 			}
+		}
+		return node;
+	};
+
+	self.reduceFnJoin = function (node) {
+		var args = node['Fn::Join'];
+		var separator = args[0];
+		var parts = args[1];
+		var allStrings = parts.every(function (part) {
+			return typeof part === 'string';
+		});
+		if (allStrings) {
+			return parts.join(separator);
 		}
 		return node;
 	};
