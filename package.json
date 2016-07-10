@@ -1,12 +1,15 @@
 {
   "name": "cfn-reducer",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "CloudFormation template reducer",
   "keywords": [
     "cloudformation"
   ],
   "license": "MIT",
   "main": "index.js",
+  "bin": {
+    "cfn-reducer": "./bin/cfn-reducer.js"
+  },
   "scripts": {
     "lint": "eslint ./src/**/*.js ./test/**/*.js",
     "test": "npm run lint && node ./test/index.js | tap-dot",
