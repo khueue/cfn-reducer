@@ -4,7 +4,7 @@
 
 var fs = require('fs');
 
-var CfnReducer = require('rfr')('/src/CfnReducer');
+var CfnReducer = require('../src/CfnReducer');
 
 var file = process.argv[2];
 if (!file) {
