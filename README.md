@@ -1,14 +1,17 @@
 cfn-reducer
 ===========
 
-Reduces your way too complex CloudFormation templates into something you can put under version control.
-
+Reduces your way too complex CloudFormation templates into something you can put
+under version control.
 
 
 ## Why?
 
-Because before you start using Troposphere, your CloudFormation templates can turn to unreadable, unverifiable JSON spaghetti. Passing parameters into your template can help you flatten out all the messy logic within the template, letting you generate specific files for different purposes (like staging/production) and put these under version control.
-
+Because before you start using Troposphere, your CloudFormation templates can turn
+to unreadable, unverifiable JSON spaghetti. Passing parameters into your template
+can help you flatten out all the messy logic within the template, letting you generate
+specific files for different purposes (like staging/production) and put these under
+version control.
 
 
 ## Install
@@ -18,10 +21,11 @@ npm install cfn-reducer
 ```
 
 
-
 ## Usage: Command Line
 
-The command line reducer accepts a path to a CloudFormation template and optional key-value pairs of stack parameters. Output goes to stdout and can be redirected to a file.
+The command line reducer accepts a path to a CloudFormation template and optional
+key-value pairs of stack parameters. Output goes to stdout and can be redirected
+to a file.
 
 ```bash
 $ ./node_modules/bin/cfn-reducer \
@@ -30,7 +34,6 @@ $ ./node_modules/bin/cfn-reducer \
 		MyParam2=some-value-2 \
 	> MyReducedTemplate.template
 ```
-
 
 
 ## Usage: Programmatically
@@ -59,11 +62,10 @@ console.log(output);
 ```
 
 
-
 ## Reductions Made
 
-*Coming soon.* Take a look at the `test` folder for now, and keep in mind that all transformations are done recursively, until nothing more can be reduced.
-
+*Coming soon.* Take a look at the `test` folder for now, and keep in mind
+that all transformations are done recursively, until nothing more can be reduced.
 
 
 ## Todo
