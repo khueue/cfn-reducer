@@ -60,6 +60,8 @@ var CfnReducer = function (template, stackParams) {
 				return self.reduceFnIf(node);
 			case 'Fn::Join':
 				return self.reduceFnJoin(node);
+			case 'Fn::Not':
+				return self.reduceFnNot(node);
 			case 'Fn::Select':
 				return self.reduceFnSelect(node);
 			case 'Ref':
@@ -122,6 +124,15 @@ var CfnReducer = function (template, stackParams) {
 		});
 		if (allStrings) {
 			return parts.join(separator);
+		}
+		return node;
+	};
+
+	self.reduceFnNot = function (node) {
+		var args = node['Fn::Not'];
+		var condition = args[0];
+		if (typeof condition === 'boolean') {
+			return !condition;
 		}
 		return node;
 	};
