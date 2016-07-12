@@ -14,7 +14,7 @@ test('Fn::And', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = 'value';
@@ -32,7 +32,7 @@ test('Fn::And', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = 'value';
@@ -50,7 +50,7 @@ test('Fn::And', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = false;
@@ -68,7 +68,7 @@ test('Fn::And', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = false;
@@ -86,7 +86,7 @@ test('Fn::And', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = true;
@@ -104,7 +104,7 @@ test('Fn::And', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = false;
@@ -122,7 +122,7 @@ test('Fn::And', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = false;
@@ -140,7 +140,7 @@ test('Fn::And', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = template;

@@ -28,7 +28,7 @@ test('Fn::FindInMap', function (t) {
 		},
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = {

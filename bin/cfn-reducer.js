@@ -2,6 +2,9 @@
 
 'use strict';
 
+var TRACE_REDUCTIONS = false;
+var INDENT_STRING = '\t';
+
 var fs = require('fs');
 
 var CfnReducer = require('../src/CfnReducer');
@@ -20,8 +23,25 @@ process.argv.slice(3).forEach(function (pair) {
 	stackParams[parts[0]] = parts[1];
 });
 
-var reducer = new CfnReducer(template, stackParams);
+var options = {};
+options.stackParams = stackParams;
+
+if (TRACE_REDUCTIONS) {
+	var bunyan = require('bunyan');
+	var logger = bunyan.createLogger({
+		name: 'cfn-reducer',
+		streams: [
+			{
+				stream: process.stderr,
+				level: 'info',
+			},
+		],
+	});
+	options.tracer = logger;
+}
+
+var reducer = new CfnReducer(template, options);
 var reduced = reducer.reduce();
 
-var output = JSON.stringify(reduced, null, '\t');
+var output = JSON.stringify(reduced, null, INDENT_STRING);
 console.log(output);

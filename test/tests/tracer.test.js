@@ -4,8 +4,16 @@ var test = require('tape');
 
 var CfnReducer = require('rfr')('/src/CfnReducer');
 
-test('Ref', function (t) {
-	t.plan(1);
+test('tracer on', function (t) {
+	t.plan(2);
+
+	var traces = [];
+
+	var tracer = {
+		info: function (obj) {
+			traces.push(obj);
+		},
+	};
 
 	var stackParams = {
 		'my-param': 'my-value',
@@ -19,6 +27,7 @@ test('Ref', function (t) {
 
 	var options = {
 		stackParams: stackParams,
+		tracer: tracer,
 	};
 	var reducer = new CfnReducer(template, options);
 	var reduced = reducer.reduce();
@@ -27,29 +36,7 @@ test('Ref', function (t) {
 		thing: 'my-value',
 	};
 
-	t.deepEqual(reduced, expected);
-});
-
-test('Ref', function (t) {
-	t.plan(1);
-
-	var stackParams = {
-		'my-param': 'my-value',
-	};
-
-	var template = {
-		thing: {
-			'Ref': 'my-some-undefined-param',
-		},
-	};
-
-	var options = {
-		stackParams: stackParams,
-	};
-	var reducer = new CfnReducer(template, options);
-	var reduced = reducer.reduce();
-
-	var expected = template;
+	t.assert(traces.length === 1);
 
 	t.deepEqual(reduced, expected);
 });

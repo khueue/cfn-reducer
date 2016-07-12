@@ -14,7 +14,7 @@ test('Fn::Equals', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = true;
@@ -32,7 +32,7 @@ test('Fn::Equals', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = true;
@@ -50,7 +50,7 @@ test('Fn::Equals', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = false;
@@ -70,7 +70,7 @@ test('Fn::Equals', function (t) {
 		],
 	};
 
-	var reducer = new CfnReducer(template, {});
+	var reducer = new CfnReducer(template);
 	var reduced = reducer.reduce();
 
 	var expected = template;
