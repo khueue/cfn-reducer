@@ -1,6 +1,6 @@
 {
   "name": "cfn-reducer",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "CloudFormation template reducer",
   "keywords": [
     "cloudformation"
