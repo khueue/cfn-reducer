@@ -67,6 +67,24 @@ console.log(output);
 *Coming soon.* Take a look at the `test` folder for now, and keep in mind
 that all transformations are done recursively, until nothing more can be reduced.
 
+### Replacements
+
+- **Ref** - Substitutes all Refs that refer to parameters explicitly passed
+into the template.
+
+### Simplifications
+
+The following intrinsics will be simplified as much as possible.
+
+- **Fn::And**
+- **Fn::Equals**
+- **Fn::FindInMap**
+- **Fn::If**
+- **Fn::Join**
+- **Fn::Not**
+- **Fn::Or**
+- **Fn::Select**
+
 
 ## Todo
 
