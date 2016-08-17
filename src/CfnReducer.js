@@ -42,7 +42,10 @@ var CfnReducer = function (template, options) {
 	self.reduceObject = function (object) {
 		var newObject = {};
 		Object.keys(object).forEach(function (key) {
-			newObject[key] = self.reduceNode(object[key]);
+			// Skip keys that are explicitly set to null.
+			if (object[key] !== null) {
+				newObject[key] = self.reduceNode(object[key]);
+			}
 		});
 		return newObject;
 	};
@@ -52,34 +55,60 @@ var CfnReducer = function (template, options) {
 	};
 
 	self.tryToReduceExpression = function (node) {
-		if (self.mightBeReducible(node)) {
-			var intrinsic = Object.keys(node)[0];
-			switch (intrinsic) {
-			case 'Fn::And':
-				return self.reduceFnAnd(node);
-			case 'Fn::Equals':
-				return self.reduceFnEquals(node);
-			case 'Fn::FindInMap':
-				return self.reduceFnFindInMap(node);
-			case 'Fn::If':
-				return self.reduceFnIf(node);
-			case 'Fn::Join':
-				return self.reduceFnJoin(node);
-			case 'Fn::Not':
-				return self.reduceFnNot(node);
-			case 'Fn::Or':
-				return self.reduceFnOr(node);
-			case 'Fn::Select':
-				return self.reduceFnSelect(node);
-			case 'Ref':
-				return self.reduceRef(node);
+		if (self.isObject(node)) {
+			if (self.looksIntrinsic(node)) {
+				var intrinsic = Object.keys(node)[0];
+				switch (intrinsic) {
+				case 'Fn::And':
+					return self.reduceFnAnd(node);
+				case 'Fn::Equals':
+					return self.reduceFnEquals(node);
+				case 'Fn::FindInMap':
+					return self.reduceFnFindInMap(node);
+				case 'Fn::If':
+					return self.reduceFnIf(node);
+				case 'Fn::Join':
+					return self.reduceFnJoin(node);
+				case 'Fn::Not':
+					return self.reduceFnNot(node);
+				case 'Fn::Or':
+					return self.reduceFnOr(node);
+				case 'Fn::Select':
+					return self.reduceFnSelect(node);
+				case 'Ref':
+					return self.reduceRef(node);
+				}
+			}
+			if (self.looksConditional(node)) {
+				return self.reduceConditionalResource(node);
 			}
 		}
 		return node;
 	};
 
-	self.mightBeReducible = function (node) {
+	self.looksIntrinsic = function (node) {
 		return self.isObject(node) && Object.keys(node).length === 1;
+	};
+
+	self.looksConditional = function (node) {
+		return self.isObject(node) && self.isString(node['Condition']);
+	};
+
+	self.reduceConditionalResource = function (node) {
+		var newNode = node;
+
+		var condName = node['Condition'];
+		if (self.isBoolean(self.template.Conditions[condName])) {
+			if (self.template.Conditions[condName]) {
+				delete newNode['Condition'];
+			} else {
+				// This will mark the resource for deletion later.
+				newNode = null;
+			}
+		}
+
+		self.traceReduction(node, newNode);
+		return newNode;
 	};
 
 	self.reduceFnAnd = function (node) {
