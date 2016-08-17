@@ -19,6 +19,8 @@ var CfnReducer = function (template, options) {
 			self.template = reduced;
 		} while (wasReduced);
 
+		// self.removeObsoleteConditions();
+		// self.removeObsoleteMappings();
 		self.removeObsoleteParameters();
 
 		return self.template;

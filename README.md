@@ -72,8 +72,7 @@ that all transformations are done recursively, until nothing more can be reduced
 
 ### Replacements
 
-- **Ref** - Substitutes all Refs that refer to parameters explicitly passed
-into the template.
+- **Ref** - Substitutes all Refs that refer to parameters explicitly passed in.
 
 ### Simplifications
 
@@ -91,6 +90,7 @@ The following intrinsics will be simplified as much as possible.
 
 ## Todo
 
-- Make API more flexible
-- Integrate substacks?
-- Strip unused mappings/conditions/[...]?
+- Remove obsolete Conditions.
+- Remove obsolete Mappings.
+- Make CLI API more flexible.
+- Integrate substacks.
