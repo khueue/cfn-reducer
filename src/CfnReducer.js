@@ -116,7 +116,29 @@ var CfnReducer = function (template, options) {
 		var newNode = node;
 
 		var args = node['Fn::FindInMap'];
-		newNode = self.template.Mappings[args[0]][args[1]][args[2]];
+		var map = args[0];
+		var section = args[1];
+		var key = args[2];
+		if (self.isString(map) && self.isString(section) && self.isString(key)) {
+			if (!self.isDefined(self.template.Mappings[map])) {
+				throw new Error('Could not find map: ' + map);
+			}
+			if (!self.isDefined(self.template.Mappings[map][section])) {
+				throw new Error('Could not find map.section: ' + [
+					map,
+					section,
+				].join('.'));
+			}
+			if (!self.isDefined(self.template.Mappings[map][section][key])) {
+				throw new Error('Could not find map.section.key: ' + [
+					map,
+					section,
+					key,
+				].join('.'));
+			}
+			newNode = self.template.Mappings[map][section][key];
+		}
+
 		self.traceReduction(node, newNode);
 		return newNode;
 	};
