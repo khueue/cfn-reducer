@@ -8,6 +8,7 @@ var CfnReducer = function (template, options) {
 	options = options || {};
 
 	self.stackParams = options.stackParams || {};
+	self.settings = options.settings || {};
 	self.tracer = options.tracer;
 
 	self.reduce = function () {
@@ -17,7 +18,20 @@ var CfnReducer = function (template, options) {
 			wasReduced = JSON.stringify(reduced) !== JSON.stringify(self.template);
 			self.template = reduced;
 		} while (wasReduced);
+
+		self.removeObsoleteParameters();
+
 		return self.template;
+	};
+
+	self.removeObsoleteParameters = function () {
+		if (self.template.Parameters) {
+			for (var param in self.template.Parameters) {
+				if (self.stackParams[param]) {
+					delete self.template.Parameters[param];
+				}
+			}
+		}
 	};
 
 	self.reduceNode = function (node) {
