@@ -31,6 +31,9 @@ var CfnReducer = function (template, options) {
 					delete self.template.Parameters[param];
 				}
 			}
+			if (!Object.keys(self.template.Parameters).length) {
+				delete self.template.Parameters;
+			}
 		}
 	};
 
