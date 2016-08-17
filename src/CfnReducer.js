@@ -84,6 +84,7 @@ var CfnReducer = function (template, options) {
 
 	self.reduceFnAnd = function (node) {
 		var newNode = node;
+
 		var args = node['Fn::And'];
 		if (args[0] === true && args[1] === true) {
 			newNode = true;
@@ -94,22 +95,26 @@ var CfnReducer = function (template, options) {
 		} else if (args[1] === true) {
 			newNode = args[0];
 		}
+
 		self.traceReduction(node, newNode);
 		return newNode;
 	};
 
 	self.reduceFnEquals = function (node) {
 		var newNode = node;
+
 		var args = node['Fn::Equals'];
 		if (self.isScalar(args[0]) && self.isScalar(args[1])) {
 			newNode = args[0] === args[1];
 		}
+
 		self.traceReduction(node, newNode);
 		return newNode;
 	};
 
 	self.reduceFnFindInMap = function (node) {
 		var newNode = node;
+
 		var args = node['Fn::FindInMap'];
 		newNode = self.template.Mappings[args[0]][args[1]][args[2]];
 		self.traceReduction(node, newNode);
@@ -118,6 +123,7 @@ var CfnReducer = function (template, options) {
 
 	self.reduceFnIf = function (node) {
 		var newNode = node;
+
 		var args = node['Fn::If'];
 		var condName = args[0];
 		if (self.isBoolean(self.template.Conditions[condName])) {
@@ -127,12 +133,14 @@ var CfnReducer = function (template, options) {
 				newNode = args[2];
 			}
 		}
+
 		self.traceReduction(node, newNode);
 		return newNode;
 	};
 
 	self.reduceFnJoin = function (node) {
 		var newNode = node;
+
 		var args = node['Fn::Join'];
 		var separator = args[0];
 		var parts = args[1];
@@ -142,23 +150,27 @@ var CfnReducer = function (template, options) {
 		if (allStrings) {
 			newNode = parts.join(separator);
 		}
+
 		self.traceReduction(node, newNode);
 		return newNode;
 	};
 
 	self.reduceFnNot = function (node) {
 		var newNode = node;
+
 		var args = node['Fn::Not'];
 		var condition = args[0];
 		if (self.isBoolean(condition)) {
 			newNode = !condition;
 		}
+
 		self.traceReduction(node, newNode);
 		return newNode;
 	};
 
 	self.reduceFnOr = function (node) {
 		var newNode = node;
+
 		var args = node['Fn::Or'];
 		var someIsTrue = args.some(function (arg) {
 			return arg === true;
@@ -166,28 +178,33 @@ var CfnReducer = function (template, options) {
 		if (someIsTrue) {
 			newNode = true;
 		}
+
 		self.traceReduction(node, newNode);
 		return newNode;
 	};
 
 	self.reduceFnSelect = function (node) {
 		var newNode = node;
+
 		var args = node['Fn::Select'];
 		var index = args[0];
 		var value = args[1];
 		if (self.isString(value)) {
 			newNode = value.split(',')[index];
 		}
+
 		self.traceReduction(node, newNode);
 		return newNode;
 	};
 
 	self.reduceRef = function (node) {
 		var newNode = node;
+
 		var name = node['Ref'];
 		if (self.isDefined(self.stackParams[name])) {
 			newNode = self.stackParams[name];
 		}
+
 		self.traceReduction(node, newNode);
 		return newNode;
 	};
