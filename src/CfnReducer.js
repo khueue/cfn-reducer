@@ -55,7 +55,11 @@ var CfnReducer = function (template, options) {
 
 	self.reduceObject = function (object) {
 		var newObject = {};
-		Object.keys(object).forEach(function (key) {
+		var keys = Object.keys(object);
+		if (self.settings.sortKeys) {
+			keys.sort();
+		}
+		keys.forEach(function (key) {
 			// Skip keys that are explicitly set to null.
 			if (object[key] !== null) {
 				newObject[key] = self.reduceNode(object[key]);

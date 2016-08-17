@@ -4,6 +4,7 @@
 
 var TRACE_REDUCTIONS = false;
 var INDENT_STRING = '\t';
+var SORT_KEYS = true;
 
 var fs = require('fs');
 
@@ -25,6 +26,8 @@ process.argv.slice(3).forEach(function (pair) {
 
 var options = {};
 options.stackParams = stackParams;
+options.settings = {};
+options.settings.sortKeys = SORT_KEYS;
 
 if (TRACE_REDUCTIONS) {
 	var bunyan = require('bunyan');
