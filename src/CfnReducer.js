@@ -12,9 +12,23 @@ var CfnReducer = function (config) {
 	}
 
 	self.template = JSON.parse(JSON.stringify(config.template));
+
 	self.stackParams = config.stackParams || {};
+
 	self.subTemplates = config.subTemplates || {};
-	self.settings = config.settings || {};
+
+	self.settings = {
+		reduceConditionalResource: true,
+		reduceFnAnd: true,
+		reduceFnEquals: true,
+		reduceFnFindInMap: true,
+		reduceFnIf: true,
+		reduceFnJoin: true,
+		reduceFnNot: true,
+		reduceFnOr: true,
+		reduceFnSelect: true,
+	};
+	Object.assign(self.settings, config.settings || {});
 
 	self.reduce = function () {
 		// Reduce until it cannot be reduced further.
@@ -26,6 +40,7 @@ var CfnReducer = function (config) {
 		} while (wasReduced);
 
 		// Clean up things that were rendered obsolete.
+		// XXX @todo Implement these.
 		// self.removeObsoleteConditions();
 		// self.removeObsoleteMappings();
 		self.removeObsoleteParameters();
@@ -40,6 +55,7 @@ var CfnReducer = function (config) {
 		return self.template;
 	};
 
+	// XXX @todo Refactor this function.
 	self.integrateSubTemplates = function () {
 		function prefixKeys(obj, prefix) {
 			for (var key in obj) {
@@ -146,27 +162,53 @@ var CfnReducer = function (config) {
 				var intrinsic = Object.keys(node)[0];
 				switch (intrinsic) {
 				case 'Fn::And':
-					return self.reduceFnAnd(node);
+					if (self.settings.reduceFnAnd) {
+						return self.reduceFnAnd(node);
+					}
+					break;
 				case 'Fn::Equals':
-					return self.reduceFnEquals(node);
+					if (self.settings.reduceFnEquals) {
+						return self.reduceFnEquals(node);
+					}
+					break;
 				case 'Fn::FindInMap':
-					return self.reduceFnFindInMap(node);
+					if (self.settings.reduceFnFindInMap) {
+						return self.reduceFnFindInMap(node);
+					}
+					break;
 				case 'Fn::If':
-					return self.reduceFnIf(node);
+					if (self.settings.reduceFnIf) {
+						return self.reduceFnIf(node);
+					}
+					break;
 				case 'Fn::Join':
-					return self.reduceFnJoin(node);
+					if (self.settings.reduceFnJoin) {
+						return self.reduceFnJoin(node);
+					}
+					break;
 				case 'Fn::Not':
-					return self.reduceFnNot(node);
+					if (self.settings.reduceFnNot) {
+						return self.reduceFnNot(node);
+					}
+					break;
 				case 'Fn::Or':
-					return self.reduceFnOr(node);
+					if (self.settings.reduceFnOr) {
+						return self.reduceFnOr(node);
+					}
+					break;
 				case 'Fn::Select':
-					return self.reduceFnSelect(node);
+					if (self.settings.reduceFnSelect) {
+						return self.reduceFnSelect(node);
+					}
+					break;
 				case 'Ref':
 					return self.reduceRef(node);
 				}
 			}
 			if (self.looksConditional(node)) {
-				return self.reduceConditionalResource(node);
+				if (self.settings.reduceConditionalResource) {
+					return self.reduceConditionalResource(node);
+				}
 			}
 		}
 		return node;

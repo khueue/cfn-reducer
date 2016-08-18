@@ -103,4 +103,3 @@ no longer be needed and are therefore be removed:
 
 - Remove obsolete Conditions.
 - Remove obsolete Mappings.
-- Feature-toggle all reductions.
