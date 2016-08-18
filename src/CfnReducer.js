@@ -1,29 +1,95 @@
 'use strict';
 
-var CfnReducer = function (template, options) {
+var stableStringify = require('json-stable-stringify');
+
+var CfnReducer = function (config) {
 	var self = this;
 
-	self.template = JSON.parse(JSON.stringify(template));
+	config = config || {};
 
-	options = options || {};
+	if (!config.template) {
+		throw new Error('Requires config.template');
+	}
 
-	self.stackParams = options.stackParams || {};
-	self.settings = options.settings || {};
-	self.tracer = options.tracer;
+	self.template = JSON.parse(JSON.stringify(config.template));
+	self.stackParams = config.stackParams || {};
+	self.subTemplates = config.subTemplates || {};
+	self.settings = config.settings || {};
 
 	self.reduce = function () {
+		// Reduce until it cannot be reduced further.
 		var wasReduced = false;
 		do {
 			var reduced = self.reduceNode(self.template);
-			wasReduced = JSON.stringify(reduced) !== JSON.stringify(self.template);
+			wasReduced = stableStringify(reduced) !== stableStringify(self.template);
 			self.template = reduced;
 		} while (wasReduced);
 
+		// Clean up things that were rendered obsolete.
 		// self.removeObsoleteConditions();
 		// self.removeObsoleteMappings();
 		self.removeObsoleteParameters();
 
+		// Reduce and integrate any substacks.
+		self.integrateSubstacks();
+
+		if (self.settings.sortKeys) {
+			self.template = JSON.parse(stableStringify(self.template));
+		}
+
 		return self.template;
+	};
+
+	self.integrateSubstacks = function () {
+		function prefixKeys(obj, prefix) {
+			for (var key in obj) {
+				obj[prefix + key] = obj[key];
+				delete obj[key];
+			}
+		}
+
+		for (var resourceName in self.template.Resources) {
+			var resource = self.template.Resources[resourceName];
+			if (resource.Type === 'AWS::CloudFormation::Stack') {
+				var template = self.subTemplates[resource.Properties.TemplateURL];
+				if (!template) {
+					continue;
+				}
+
+				var conf = {};
+				conf.template = template;
+				conf.settings = self.settings;
+				if (resource.Properties && resource.Properties.Parameters) {
+					conf.stackParams = resource.Properties.Parameters;
+				}
+				var reducer = new CfnReducer(conf);
+				var subTemplate = reducer.reduce();
+
+				prefixKeys(subTemplate.Conditions, resourceName);
+				prefixKeys(subTemplate.Mappings, resourceName);
+				prefixKeys(subTemplate.Parameters, resourceName);
+				prefixKeys(subTemplate.Resources, resourceName);
+
+				var key;
+
+				for (key in subTemplate.Conditions) {
+					self.template.Conditions[key] = subTemplate.Conditions[key];
+				}
+				for (key in subTemplate.Mappings) {
+					self.template.Mappings[key] = subTemplate.Mappings[key];
+				}
+				for (key in subTemplate.Parameters) {
+					self.template.Parameters[key] = subTemplate.Parameters[key];
+				}
+				for (key in subTemplate.Resources) {
+					self.template.Resources[key] = subTemplate.Resources[key];
+				}
+
+				for (key in subTemplate.Resources) {
+					delete self.template.Resources[resourceName];
+				}
+			}
+		}
 	};
 
 	self.removeObsoleteParameters = function () {
@@ -61,9 +127,6 @@ var CfnReducer = function (template, options) {
 	self.reduceObject = function (object) {
 		var newObject = {};
 		var keys = Object.keys(object);
-		if (self.settings.sortKeys) {
-			keys.sort();
-		}
 		keys.forEach(function (key) {
 			// Skip keys that are explicitly set to null.
 			if (object[key] !== null) {
@@ -312,8 +375,8 @@ var CfnReducer = function (template, options) {
 	};
 
 	self.traceReduction = function (oldNode, newNode) {
-		if (self.tracer && JSON.stringify(oldNode) !== JSON.stringify(newNode)) {
-			self.tracer.info({
+		if (self.settings.tracer && stableStringify(oldNode) !== stableStringify(newNode)) {
+			self.settings.tracer.info({
 				message: 'Reducing oldNode to newNode',
 				oldNode: oldNode,
 				newNode: newNode,

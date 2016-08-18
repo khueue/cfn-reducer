@@ -7,20 +7,20 @@ var CfnReducer = require('rfr')('/src/CfnReducer');
 test('Ref', function (t) {
 	t.plan(1);
 
-	var stackParams = {
-		'my-param': 'my-value',
-	};
-
 	var template = {
 		thing: {
 			'Ref': 'my-param',
 		},
 	};
 
-	var options = {
-		stackParams: stackParams,
+	var stackParams = {
+		'my-param': 'my-value',
 	};
-	var reducer = new CfnReducer(template, options);
+
+	var reducer = new CfnReducer({
+		template: template,
+		stackParams: stackParams,
+	});
 	var reduced = reducer.reduce();
 
 	var expected = {
@@ -33,20 +33,20 @@ test('Ref', function (t) {
 test('Ref', function (t) {
 	t.plan(1);
 
-	var stackParams = {
-		'my-param': 'my-value',
-	};
-
 	var template = {
 		thing: {
 			'Ref': 'my-some-undefined-param',
 		},
 	};
 
-	var options = {
-		stackParams: stackParams,
+	var stackParams = {
+		'my-param': 'my-value',
 	};
-	var reducer = new CfnReducer(template, options);
+
+	var reducer = new CfnReducer({
+		template: template,
+		stackParams: stackParams,
+	});
 	var reduced = reducer.reduce();
 
 	var expected = template;

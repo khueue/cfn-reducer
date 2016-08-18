@@ -15,21 +15,23 @@ test('tracer on', function (t) {
 		},
 	};
 
-	var stackParams = {
-		'my-param': 'my-value',
-	};
-
 	var template = {
 		thing: {
 			'Ref': 'my-param',
 		},
 	};
 
-	var options = {
-		stackParams: stackParams,
-		tracer: tracer,
+	var stackParams = {
+		'my-param': 'my-value',
 	};
-	var reducer = new CfnReducer(template, options);
+
+	var reducer = new CfnReducer({
+		template: template,
+		stackParams: stackParams,
+		settings: {
+			tracer: tracer,
+		},
+	});
 	var reduced = reducer.reduce();
 
 	var expected = {

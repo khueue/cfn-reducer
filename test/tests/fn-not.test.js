@@ -15,7 +15,9 @@ test('Fn::Not', function (t) {
 		},
 	};
 
-	var reducer = new CfnReducer(template);
+	var reducer = new CfnReducer({
+		template: template,
+	});
 	var reduced = reducer.reduce();
 
 	var expected = {
@@ -36,7 +38,9 @@ test('Fn::Not', function (t) {
 		},
 	};
 
-	var reducer = new CfnReducer(template);
+	var reducer = new CfnReducer({
+		template: template,
+	});
 	var reduced = reducer.reduce();
 
 	var expected = {
@@ -59,7 +63,9 @@ test('Fn::Not', function (t) {
 		},
 	};
 
-	var reducer = new CfnReducer(template);
+	var reducer = new CfnReducer({
+		template: template,
+	});
 	var reduced = reducer.reduce();
 
 	var expected = template;

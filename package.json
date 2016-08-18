@@ -16,7 +16,7 @@
     "cov": "npm run lint && istanbul cover --dir ./test/coverage ./test/index.js | tap-spec"
   },
   "dependencies": {
-    "bunyan": "1.8.1"
+    "json-stable-stringify": "1.0.1"
   },
   "devDependencies": {
     "eslint": "3.0.1",
