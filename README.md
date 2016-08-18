@@ -55,7 +55,7 @@ that all transformations are done recursively, until nothing more can be reduced
 ### References
 
 All stack parameters passed to the reducer will be inserted in place of their
-corresponding Refs.
+corresponding `Ref`s.
 
 ### Simplifications
 
@@ -70,6 +70,10 @@ The following intrinsic functions will be simplified as much as possible:
 - `Fn::Or`
 - `Fn::Select`
 
+`Fn::And` will be reduced to `true` if both conditions can be evaluated to `true`,
+`Fn::FindInMap` will be replaced by its `Mappings` lookup, `Fn::Join` will be
+replaced by its concatenation if all arguments can be evaluated to strings, etc.
+
 ### Conditional Resources
 
 A resource with a `Condition` that evaluates to `true` will have its `Condition` removed.
@@ -78,7 +82,7 @@ A resource with a `Condition` that evaluates to `false` will be removed altogeth
 ### Sub-Templates
 
 Resources of type `AWS::CloudFormation::Stack` can be reduced and integrated back
-into the main template. All things (conditions, mappings, outputs, resources) from the
+into the main template. All things (conditions, mappings, outputs, resources) in the
 sub-template will be prefixed with the resource's name when being integrated
 back into the main template.
 

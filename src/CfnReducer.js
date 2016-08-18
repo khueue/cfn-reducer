@@ -30,8 +30,8 @@ var CfnReducer = function (config) {
 		// self.removeObsoleteMappings();
 		self.removeObsoleteParameters();
 
-		// Reduce and integrate any substacks.
-		self.integrateSubstacks();
+		// Reduce and integrate any sub-templates.
+		self.integrateSubTemplates();
 
 		if (self.settings.sortKeys) {
 			self.template = JSON.parse(stableStringify(self.template));
@@ -40,7 +40,7 @@ var CfnReducer = function (config) {
 		return self.template;
 	};
 
-	self.integrateSubstacks = function () {
+	self.integrateSubTemplates = function () {
 		function prefixKeys(obj, prefix) {
 			for (var key in obj) {
 				obj[prefix + key] = obj[key];
