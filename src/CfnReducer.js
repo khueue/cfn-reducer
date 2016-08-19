@@ -30,6 +30,7 @@ var CfnReducer = function (config) {
 		reduceFnOr: true,
 		reduceFnSelect: true,
 		// Other:
+		tracer: undefined,
 		sortKeys: false,
 	};
 	Object.assign(self.settings, config.settings || {});
