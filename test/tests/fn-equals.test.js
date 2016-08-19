@@ -85,3 +85,26 @@ test('Fn::Equals', function (t) {
 
 	t.deepEqual(reduced, expected);
 });
+
+test('Fn::Equals - toggled off', function (t) {
+	t.plan(1);
+
+	var template = {
+		'Fn::Equals': [
+			'value',
+			'other-value',
+		],
+	};
+
+	var reducer = new CfnReducer({
+		template: template,
+		settings: {
+			reduceFnEquals: false,
+		},
+	});
+	var reduced = reducer.reduce();
+
+	var expected = template;
+
+	t.deepEqual(reduced, expected);
+});

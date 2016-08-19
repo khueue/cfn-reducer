@@ -95,3 +95,34 @@ test('Fn::If', function (t) {
 
 	t.deepEqual(reduced, expected);
 });
+
+test('Fn::If - toggled off', function (t) {
+	t.plan(1);
+
+	var conditions = {
+		'my-cond': true,
+	};
+
+	var template = {
+		Conditions: conditions,
+		thing: {
+			'Fn::If': [
+				'my-cond',
+				'on-true',
+				'on-false',
+			],
+		},
+	};
+
+	var reducer = new CfnReducer({
+		template: template,
+		settings: {
+			reduceFnIf: false,
+		},
+	});
+	var reduced = reducer.reduce();
+
+	var expected = template;
+
+	t.deepEqual(reduced, expected);
+});

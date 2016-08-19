@@ -72,3 +72,27 @@ test('Fn::Not', function (t) {
 
 	t.deepEqual(reduced, expected);
 });
+
+test('Fn::Not - toggled off', function (t) {
+	t.plan(1);
+
+	var template = {
+		thing: {
+			'Fn::Not': [
+				true,
+			],
+		},
+	};
+
+	var reducer = new CfnReducer({
+		template: template,
+		settings: {
+			reduceFnNot: false,
+		},
+	});
+	var reduced = reducer.reduce();
+
+	var expected = template;
+
+	t.deepEqual(reduced, expected);
+});

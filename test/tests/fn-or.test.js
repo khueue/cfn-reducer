@@ -53,3 +53,30 @@ test('Fn::Or', function (t) {
 
 	t.deepEqual(reduced, expected);
 });
+
+test('Fn::Or', function (t) {
+	t.plan(1);
+
+	var template = {
+		thing: {
+			'Fn::Or': [
+				{
+					something: 'complicated',
+				},
+				true,
+			],
+		},
+	};
+
+	var reducer = new CfnReducer({
+		template: template,
+		settings: {
+			reduceFnOr: false,
+		},
+	});
+	var reduced = reducer.reduce();
+
+	var expected = template;
+
+	t.deepEqual(reduced, expected);
+});

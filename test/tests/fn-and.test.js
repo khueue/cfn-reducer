@@ -163,3 +163,26 @@ test('Fn::And', function (t) {
 
 	t.deepEqual(reduced, expected);
 });
+
+test('Fn::And - toggled off', function (t) {
+	t.plan(1);
+
+	var template = {
+		'Fn::And': [
+			true,
+			true,
+		],
+	};
+
+	var reducer = new CfnReducer({
+		template: template,
+		settings: {
+			reduceFnAnd: false,
+		},
+	});
+	var reduced = reducer.reduce();
+
+	var expected = template;
+
+	t.deepEqual(reduced, expected);
+});
