@@ -111,9 +111,6 @@ var CfnReducer = function (config) {
 			var resource = self.template.Resources[resourceName];
 			if (resource.Type === 'AWS::CloudFormation::Stack') {
 				var template = self.subTemplates[resource.Properties.TemplateURL];
-				if (!template) {
-					continue;
-				}
 
 				var conf = {};
 				conf.template = template;
@@ -153,57 +150,47 @@ var CfnReducer = function (config) {
 	};
 
 	self.cleanUpOutputs = function () {
-		if (self.template.Outputs) {
-			if (!Object.keys(self.template.Outputs).length) {
-				delete self.template.Outputs;
-			}
+		if (!Object.keys(self.template.Outputs).length) {
+			delete self.template.Outputs;
 		}
 	};
 
 	self.cleanUpMappings = function () {
-		if (self.template.Mappings) {
-			for (var key in self.template.Mappings) {
-				if (!self.stats.mappings[key]) {
-					delete self.template.Mappings[key];
-				}
+		for (var key in self.template.Mappings) {
+			if (!self.stats.mappings[key]) {
+				delete self.template.Mappings[key];
 			}
-			if (!Object.keys(self.template.Mappings).length) {
-				delete self.template.Mappings;
-			}
+		}
+		if (!Object.keys(self.template.Mappings).length) {
+			delete self.template.Mappings;
 		}
 	};
 
 	self.cleanUpConditions = function () {
-		if (self.template.Conditions) {
-			for (var key in self.template.Conditions) {
-				if (!self.stats.conditions[key]) {
-					delete self.template.Conditions[key];
-				}
+		for (var key in self.template.Conditions) {
+			if (!self.stats.conditions[key]) {
+				delete self.template.Conditions[key];
 			}
-			if (!Object.keys(self.template.Conditions).length) {
-				delete self.template.Conditions;
-			}
+		}
+		if (!Object.keys(self.template.Conditions).length) {
+			delete self.template.Conditions;
 		}
 	};
 
 	self.cleanUpResources = function () {
-		if (self.template.Resources) {
-			if (!Object.keys(self.template.Resources).length) {
-				delete self.template.Resources;
-			}
+		if (!Object.keys(self.template.Resources).length) {
+			delete self.template.Resources;
 		}
 	};
 
 	self.cleanUpParameters = function () {
-		if (self.template.Parameters) {
-			for (var key in self.template.Parameters) {
-				if (!self.stats.refs[key]) {
-					delete self.template.Parameters[key];
-				}
+		for (var key in self.template.Parameters) {
+			if (!self.stats.refs[key]) {
+				delete self.template.Parameters[key];
 			}
-			if (!Object.keys(self.template.Parameters).length) {
-				delete self.template.Parameters;
-			}
+		}
+		if (!Object.keys(self.template.Parameters).length) {
+			delete self.template.Parameters;
 		}
 	};
 
