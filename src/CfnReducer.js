@@ -18,7 +18,9 @@ var CfnReducer = function (config) {
 	self.subTemplates = config.subTemplates || {};
 
 	self.settings = {
+		// Resources:
 		reduceConditionalResource: true,
+		// Intrinsics:
 		reduceFnAnd: true,
 		reduceFnEquals: true,
 		reduceFnFindInMap: true,
@@ -27,6 +29,8 @@ var CfnReducer = function (config) {
 		reduceFnNot: true,
 		reduceFnOr: true,
 		reduceFnSelect: true,
+		// Other:
+		sortKeys: false,
 	};
 	Object.assign(self.settings, config.settings || {});
 
