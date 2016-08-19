@@ -8,14 +8,16 @@ test('Fn::Join', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Join': [
-				'.',
-				[
-					'value0',
-					'value1',
+		Resources: {
+			thing: {
+				'Fn::Join': [
+					'.',
+					[
+						'value0',
+						'value1',
+					],
 				],
-			],
+			},
 		},
 	};
 
@@ -25,7 +27,9 @@ test('Fn::Join', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		thing: 'value0.value1',
+		Resources: {
+			thing: 'value0.value1',
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -35,17 +39,19 @@ test('Fn::Join', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Join': [
-				'.',
-				[
-					'value0',
-					'value1',
-					{
-						something: 'complicated',
-					},
+		Resources: {
+			thing: {
+				'Fn::Join': [
+					'.',
+					[
+						'value0',
+						'value1',
+						{
+							something: 'complicated',
+						},
+					],
 				],
-			],
+			},
 		},
 	};
 
@@ -63,14 +69,16 @@ test('Fn::Join - toggled off', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Join': [
-				'.',
-				[
-					'value0',
-					'value1',
+		Resources: {
+			thing: {
+				'Fn::Join': [
+					'.',
+					[
+						'value0',
+						'value1',
+					],
 				],
-			],
+			},
 		},
 	};
 

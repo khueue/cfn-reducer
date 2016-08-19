@@ -16,8 +16,10 @@ test('tracer on', function (t) {
 	};
 
 	var template = {
-		thing: {
-			'Ref': 'my-param',
+		Resources: {
+			thing: {
+				'Ref': 'my-param',
+			},
 		},
 	};
 
@@ -35,7 +37,9 @@ test('tracer on', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		thing: 'my-value',
+		Resources: {
+			thing: 'my-value',
+		},
 	};
 
 	t.assert(traces.length === 1);

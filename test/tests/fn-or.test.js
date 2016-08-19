@@ -8,13 +8,15 @@ test('Fn::Or', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Or': [
-				{
-					something: 'complicated',
-				},
-				true,
-			],
+		Resources: {
+			thing: {
+				'Fn::Or': [
+					{
+						something: 'complicated',
+					},
+					true,
+				],
+			},
 		},
 	};
 
@@ -24,7 +26,9 @@ test('Fn::Or', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		thing: true,
+		Resources: {
+			thing: true,
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -34,13 +38,15 @@ test('Fn::Or', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Or': [
-				{
-					something: 'complicated',
-				},
-				false,
-			],
+		Resources: {
+			thing: {
+				'Fn::Or': [
+					{
+						something: 'complicated',
+					},
+					false,
+				],
+			},
 		},
 	};
 
@@ -58,13 +64,15 @@ test('Fn::Or', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Or': [
-				{
-					something: 'complicated',
-				},
-				true,
-			],
+		Resources: {
+			thing: {
+				'Fn::Or': [
+					{
+						something: 'complicated',
+					},
+					true,
+				],
+			},
 		},
 	};
 

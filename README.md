@@ -49,8 +49,7 @@ console.log(output);
 
 ## Reductions Made
 
-*Needs to be fleshed out.* Take a look at the `test` folder for now, and keep in mind
-that all transformations are done recursively, until nothing more can be reduced.
+Reductions are made recursively, until nothing more can be reduced.
 
 ### References
 
@@ -92,14 +91,16 @@ containing the full template objects that `TemplateURL` references refer to.
 ### Clean Up
 
 As a result of reductions and simplifications, certain parts of the template might
-no longer be needed and are therefore be removed:
+no longer be needed and are therefore removed:
 
 - `Parameters` that were passed in as `stackParams`.
-- ***NOT IMPLEMENTED*** `Mappings` that have been resolved and are no longer referenced.
-- ***NOT IMPLEMENTED*** `Conditions` that have been evaluated and inlined.
+- `Mappings` that have been resolved and are no longer referenced.
+- `Conditions` that have been evaluated and inlined.
+
+Top-level keys that have become empty are removed.
 
 
 ## Todo
 
-- Remove obsolete Conditions.
-- Remove obsolete Mappings.
+- Refactor the code.
+- Make name-prefixing more robust.

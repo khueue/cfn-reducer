@@ -8,11 +8,13 @@ test('sort keys - toggled off', function (t) {
 	t.plan(1);
 
 	var template = {
-		b: {
-			'Ref': 'my-param-b',
-		},
-		a: {
-			'Ref': 'my-param-a',
+		Resources: {
+			b: {
+				'Ref': 'my-param-b',
+			},
+			a: {
+				'Ref': 'my-param-a',
+			},
 		},
 	};
 
@@ -33,11 +35,13 @@ test('sort keys - toggled on', function (t) {
 	t.plan(1);
 
 	var template = {
-		b: {
-			'Ref': 'my-param-b',
-		},
-		a: {
-			'Ref': 'my-param-a',
+		Resources: {
+			b: {
+				'Ref': 'my-param-b',
+			},
+			a: {
+				'Ref': 'my-param-a',
+			},
 		},
 	};
 
@@ -50,11 +54,13 @@ test('sort keys - toggled on', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		a: {
-			'Ref': 'my-param-a',
-		},
-		b: {
-			'Ref': 'my-param-b',
+		Resources: {
+			a: {
+				'Ref': 'my-param-a',
+			},
+			b: {
+				'Ref': 'my-param-b',
+			},
 		},
 	};
 

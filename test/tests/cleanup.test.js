@@ -18,7 +18,11 @@ test('cleanup parameters', function (t) {
 
 	var template = {
 		Parameters: parameters,
-		thing: {},
+		Resources: {
+			thing: {
+				'Ref': 'MyParam2',
+			},
+		},
 	};
 
 	var reducer = new CfnReducer({
@@ -35,7 +39,11 @@ test('cleanup parameters', function (t) {
 				'something': 'complex',
 			},
 		},
-		thing: {},
+		Resources: {
+			thing: {
+				'Ref': 'MyParam2',
+			},
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -55,7 +63,9 @@ test('cleanup parameters', function (t) {
 
 	var template = {
 		Parameters: parameters,
-		thing: {},
+		Resources: {
+			thing: {},
+		},
 	};
 
 	var reducer = new CfnReducer({
@@ -68,7 +78,9 @@ test('cleanup parameters', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		thing: {},
+		Resources: {
+			thing: {},
+		},
 	};
 
 	t.deepEqual(reduced, expected);

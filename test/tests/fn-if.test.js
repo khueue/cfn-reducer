@@ -13,12 +13,14 @@ test('Fn::If', function (t) {
 
 	var template = {
 		Conditions: conditions,
-		thing: {
-			'Fn::If': [
-				'my-cond',
-				'on-true',
-				'on-false',
-			],
+		Resources: {
+			thing: {
+				'Fn::If': [
+					'my-cond',
+					'on-true',
+					'on-false',
+				],
+			},
 		},
 	};
 
@@ -28,8 +30,9 @@ test('Fn::If', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		Conditions: conditions,
-		thing: 'on-true',
+		Resources: {
+			thing: 'on-true',
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -44,12 +47,14 @@ test('Fn::If', function (t) {
 
 	var template = {
 		Conditions: conditions,
-		thing: {
-			'Fn::If': [
-				'my-cond',
-				'on-true',
-				'on-false',
-			],
+		Resources: {
+			thing: {
+				'Fn::If': [
+					'my-cond',
+					'on-true',
+					'on-false',
+				],
+			},
 		},
 	};
 
@@ -59,8 +64,9 @@ test('Fn::If', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		Conditions: conditions,
-		thing: 'on-false',
+		Resources: {
+			thing: 'on-false',
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -77,12 +83,14 @@ test('Fn::If', function (t) {
 
 	var template = {
 		Conditions: conditions,
-		thing: {
-			'Fn::If': [
-				'my-cond',
-				'on-true',
-				'on-false',
-			],
+		Resources: {
+			thing: {
+				'Fn::If': [
+					'my-cond',
+					'on-true',
+					'on-false',
+				],
+			},
 		},
 	};
 
@@ -105,12 +113,14 @@ test('Fn::If - toggled off', function (t) {
 
 	var template = {
 		Conditions: conditions,
-		thing: {
-			'Fn::If': [
-				'my-cond',
-				'on-true',
-				'on-false',
-			],
+		Resources: {
+			thing: {
+				'Fn::If': [
+					'my-cond',
+					'on-true',
+					'on-false',
+				],
+			},
 		},
 	};
 

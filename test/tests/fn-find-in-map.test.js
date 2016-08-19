@@ -19,12 +19,14 @@ test('Fn::FindInMap', function (t) {
 
 	var template = {
 		Mappings: mappings,
-		thing: {
-			'Fn::FindInMap': [
-				'my-map',
-				'my-section',
-				'my-key-2',
-			],
+		Resources: {
+			thing: {
+				'Fn::FindInMap': [
+					'my-map',
+					'my-section',
+					'my-key-2',
+				],
+			},
 		},
 	};
 
@@ -34,8 +36,9 @@ test('Fn::FindInMap', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		Mappings: mappings,
-		thing: 'my-value-2',
+		Resources: {
+			thing: 'my-value-2',
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -56,14 +59,16 @@ test('Fn::FindInMap', function (t) {
 
 	var template = {
 		Mappings: mappings,
-		thing: {
-			'Fn::FindInMap': [
-				'my-map',
-				{
-					'Ref': 'my-ref',
-				},
-				'my-key-2',
-			],
+		Resources: {
+			thing: {
+				'Fn::FindInMap': [
+					'my-map',
+					{
+						'Ref': 'my-ref',
+					},
+					'my-key-2',
+				],
+			},
 		},
 	};
 
@@ -92,12 +97,14 @@ test('Fn::FindInMap - toggled off', function (t) {
 
 	var template = {
 		Mappings: mappings,
-		thing: {
-			'Fn::FindInMap': [
-				'my-map',
-				'my-section',
-				'my-key-2',
-			],
+		Resources: {
+			thing: {
+				'Fn::FindInMap': [
+					'my-map',
+					'my-section',
+					'my-key-2',
+				],
+			},
 		},
 	};
 
@@ -129,12 +136,14 @@ test('Fn::FindInMap - bad map', function (t) {
 
 	var template = {
 		Mappings: mappings,
-		thing: {
-			'Fn::FindInMap': [
-				'my-map-DOES-NOT-EXIST',
-				'my-section',
-				'my-key-2',
-			],
+		Resources: {
+			thing: {
+				'Fn::FindInMap': [
+					'my-map-DOES-NOT-EXIST',
+					'my-section',
+					'my-key-2',
+				],
+			},
 		},
 	};
 
@@ -163,12 +172,14 @@ test('Fn::FindInMap - bad map.section', function (t) {
 
 	var template = {
 		Mappings: mappings,
-		thing: {
-			'Fn::FindInMap': [
-				'my-map',
-				'my-section-DOES-NOT-EXIST',
-				'my-key-2',
-			],
+		Resources: {
+			thing: {
+				'Fn::FindInMap': [
+					'my-map',
+					'my-section-DOES-NOT-EXIST',
+					'my-key-2',
+				],
+			},
 		},
 	};
 
@@ -197,12 +208,14 @@ test('Fn::FindInMap - bad map.section.key', function (t) {
 
 	var template = {
 		Mappings: mappings,
-		thing: {
-			'Fn::FindInMap': [
-				'my-map',
-				'my-section',
-				'my-key-DOES-NOT-EXIST',
-			],
+		Resources: {
+			thing: {
+				'Fn::FindInMap': [
+					'my-map',
+					'my-section',
+					'my-key-DOES-NOT-EXIST',
+				],
+			},
 		},
 	};
 

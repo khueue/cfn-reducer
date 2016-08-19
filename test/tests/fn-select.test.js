@@ -8,11 +8,13 @@ test('Fn::Select', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Select': [
-				0,
-				'value0,value1',
-			],
+		Resources: {
+			thing: {
+				'Fn::Select': [
+					0,
+					'value0,value1',
+				],
+			},
 		},
 	};
 
@@ -22,7 +24,9 @@ test('Fn::Select', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		thing: 'value0',
+		Resources: {
+			thing: 'value0',
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -32,11 +36,13 @@ test('Fn::Select', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Select': [
-				1,
-				'value0,value1',
-			],
+		Resources: {
+			thing: {
+				'Fn::Select': [
+					1,
+					'value0,value1',
+				],
+			},
 		},
 	};
 
@@ -46,7 +52,9 @@ test('Fn::Select', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		thing: 'value1',
+		Resources: {
+			thing: 'value1',
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -56,13 +64,15 @@ test('Fn::Select', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Select': [
-				1,
-				{
-					something: 'complicated',
-				},
-			],
+		Resources: {
+			thing: {
+				'Fn::Select': [
+					1,
+					{
+						something: 'complicated',
+					},
+				],
+			},
 		},
 	};
 
@@ -80,11 +90,13 @@ test('Fn::Select', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Select': [
-				0,
-				'value0,value1',
-			],
+		Resources: {
+			thing: {
+				'Fn::Select': [
+					0,
+					'value0,value1',
+				],
+			},
 		},
 	};
 

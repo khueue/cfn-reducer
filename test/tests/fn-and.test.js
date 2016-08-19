@@ -8,10 +8,14 @@ test('Fn::And', function (t) {
 	t.plan(1);
 
 	var template = {
-		'Fn::And': [
-			true,
-			'value',
-		],
+		Resources: {
+			thing: {
+				'Fn::And': [
+					true,
+					'value',
+				],
+			},
+		},
 	};
 
 	var reducer = new CfnReducer({
@@ -19,7 +23,11 @@ test('Fn::And', function (t) {
 	});
 	var reduced = reducer.reduce();
 
-	var expected = 'value';
+	var expected = {
+		Resources: {
+			thing: 'value',
+		},
+	};
 
 	t.deepEqual(reduced, expected);
 });
@@ -28,10 +36,14 @@ test('Fn::And', function (t) {
 	t.plan(1);
 
 	var template = {
-		'Fn::And': [
-			'value',
-			true,
-		],
+		Resources: {
+			thing: {
+				'Fn::And': [
+					'value',
+					true,
+				],
+			},
+		},
 	};
 
 	var reducer = new CfnReducer({
@@ -39,7 +51,11 @@ test('Fn::And', function (t) {
 	});
 	var reduced = reducer.reduce();
 
-	var expected = 'value';
+	var expected = {
+		Resources: {
+			thing: 'value',
+		},
+	};
 
 	t.deepEqual(reduced, expected);
 });
@@ -48,10 +64,14 @@ test('Fn::And', function (t) {
 	t.plan(1);
 
 	var template = {
-		'Fn::And': [
-			false,
-			'value',
-		],
+		Resources: {
+			thing: {
+				'Fn::And': [
+					false,
+					'value',
+				],
+			},
+		},
 	};
 
 	var reducer = new CfnReducer({
@@ -59,7 +79,11 @@ test('Fn::And', function (t) {
 	});
 	var reduced = reducer.reduce();
 
-	var expected = false;
+	var expected = {
+		Resources: {
+			thing: false,
+		},
+	};
 
 	t.deepEqual(reduced, expected);
 });
@@ -68,10 +92,14 @@ test('Fn::And', function (t) {
 	t.plan(1);
 
 	var template = {
-		'Fn::And': [
-			'value',
-			false,
-		],
+		Resources: {
+			thing: {
+				'Fn::And': [
+					'value',
+					false,
+				],
+			},
+		},
 	};
 
 	var reducer = new CfnReducer({
@@ -79,7 +107,11 @@ test('Fn::And', function (t) {
 	});
 	var reduced = reducer.reduce();
 
-	var expected = false;
+	var expected = {
+		Resources: {
+			thing: false,
+		},
+	};
 
 	t.deepEqual(reduced, expected);
 });
@@ -88,10 +120,14 @@ test('Fn::And', function (t) {
 	t.plan(1);
 
 	var template = {
-		'Fn::And': [
-			true,
-			true,
-		],
+		Resources: {
+			thing: {
+				'Fn::And': [
+					true,
+					true,
+				],
+			},
+		},
 	};
 
 	var reducer = new CfnReducer({
@@ -99,7 +135,11 @@ test('Fn::And', function (t) {
 	});
 	var reduced = reducer.reduce();
 
-	var expected = true;
+	var expected = {
+		Resources: {
+			thing: true,
+		},
+	};
 
 	t.deepEqual(reduced, expected);
 });
@@ -108,10 +148,14 @@ test('Fn::And', function (t) {
 	t.plan(1);
 
 	var template = {
-		'Fn::And': [
-			true,
-			false,
-		],
+		Resources: {
+			thing: {
+				'Fn::And': [
+					true,
+					false,
+				],
+			},
+		},
 	};
 
 	var reducer = new CfnReducer({
@@ -119,7 +163,11 @@ test('Fn::And', function (t) {
 	});
 	var reduced = reducer.reduce();
 
-	var expected = false;
+	var expected = {
+		Resources: {
+			thing: false,
+		},
+	};
 
 	t.deepEqual(reduced, expected);
 });
@@ -128,10 +176,14 @@ test('Fn::And', function (t) {
 	t.plan(1);
 
 	var template = {
-		'Fn::And': [
-			false,
-			true,
-		],
+		Resources: {
+			thing: {
+				'Fn::And': [
+					false,
+					true,
+				],
+			},
+		},
 	};
 
 	var reducer = new CfnReducer({
@@ -139,7 +191,11 @@ test('Fn::And', function (t) {
 	});
 	var reduced = reducer.reduce();
 
-	var expected = false;
+	var expected = {
+		Resources: {
+			thing: false,
+		},
+	};
 
 	t.deepEqual(reduced, expected);
 });
@@ -148,10 +204,14 @@ test('Fn::And', function (t) {
 	t.plan(1);
 
 	var template = {
-		'Fn::And': [
-			'value',
-			'value',
-		],
+		Resources: {
+			thing: {
+				'Fn::And': [
+					'value',
+					'value',
+				],
+			},
+		},
 	};
 
 	var reducer = new CfnReducer({
@@ -168,10 +228,14 @@ test('Fn::And - toggled off', function (t) {
 	t.plan(1);
 
 	var template = {
-		'Fn::And': [
-			true,
-			true,
-		],
+		Resources: {
+			thing: {
+				'Fn::And': [
+					true,
+					true,
+				],
+			},
+		},
 	};
 
 	var reducer = new CfnReducer({

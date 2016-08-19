@@ -8,8 +8,10 @@ test('Ref', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Ref': 'my-param',
+		Resources: {
+			thing: {
+				'Ref': 'my-param',
+			},
 		},
 	};
 
@@ -24,7 +26,9 @@ test('Ref', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		thing: 'my-value',
+		Resources: {
+			thing: 'my-value',
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -34,8 +38,10 @@ test('Ref', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Ref': 'my-some-undefined-param',
+		Resources: {
+			thing: {
+				'Ref': 'my-some-undefined-param',
+			},
 		},
 	};
 

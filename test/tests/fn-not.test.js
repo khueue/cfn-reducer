@@ -8,10 +8,12 @@ test('Fn::Not', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Not': [
-				true,
-			],
+		Resources: {
+			thing: {
+				'Fn::Not': [
+					true,
+				],
+			},
 		},
 	};
 
@@ -21,7 +23,9 @@ test('Fn::Not', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		thing: false,
+		Resources: {
+			thing: false,
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -31,10 +35,12 @@ test('Fn::Not', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Not': [
-				false,
-			],
+		Resources: {
+			thing: {
+				'Fn::Not': [
+					false,
+				],
+			},
 		},
 	};
 
@@ -44,7 +50,9 @@ test('Fn::Not', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		thing: true,
+		Resources: {
+			thing: true,
+		},
 	};
 
 	t.deepEqual(reduced, expected);
@@ -54,12 +62,14 @@ test('Fn::Not', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Not': [
-				{
-					something: 'complicated',
-				},
-			],
+		Resources: {
+			thing: {
+				'Fn::Not': [
+					{
+						something: 'complicated',
+					},
+				],
+			},
 		},
 	};
 
@@ -77,10 +87,12 @@ test('Fn::Not - toggled off', function (t) {
 	t.plan(1);
 
 	var template = {
-		thing: {
-			'Fn::Not': [
-				true,
-			],
+		Resources: {
+			thing: {
+				'Fn::Not': [
+					true,
+				],
+			},
 		},
 	};
 

@@ -15,8 +15,10 @@ test('conditional resource - cannot evaluate', function (t) {
 
 	var template = {
 		Conditions: conditions,
-		thing: {
-			'Condition': 'MyCondition',
+		Resources: {
+			thing: {
+				'Condition': 'MyCondition',
+			},
 		},
 	};
 
@@ -39,8 +41,10 @@ test('conditional resource - true', function (t) {
 
 	var template = {
 		Conditions: conditions,
-		thing: {
-			'Condition': 'MyCondition',
+		Resources: {
+			thing: {
+				'Condition': 'MyCondition',
+			},
 		},
 	};
 
@@ -50,8 +54,9 @@ test('conditional resource - true', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		Conditions: conditions,
-		thing: {
+		Resources: {
+			thing: {
+			},
 		},
 	};
 
@@ -67,8 +72,10 @@ test('conditional resource - false', function (t) {
 
 	var template = {
 		Conditions: conditions,
-		thing: {
-			'Condition': 'MyCondition',
+		Resources: {
+			thing: {
+				'Condition': 'MyCondition',
+			},
 		},
 	};
 
@@ -78,7 +85,6 @@ test('conditional resource - false', function (t) {
 	var reduced = reducer.reduce();
 
 	var expected = {
-		Conditions: conditions,
 	};
 
 	t.deepEqual(reduced, expected);
@@ -93,8 +99,10 @@ test('conditional resource - toggled off', function (t) {
 
 	var template = {
 		Conditions: conditions,
-		thing: {
-			'Condition': 'MyCondition',
+		Resources: {
+			thing: {
+				'Condition': 'MyCondition',
+			},
 		},
 	};
 
