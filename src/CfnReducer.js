@@ -111,14 +111,15 @@ var CfnReducer = function (config) {
 			var resource = self.template.Resources[resourceName];
 			if (resource.Type === 'AWS::CloudFormation::Stack') {
 				var template = self.subTemplates[resource.Properties.TemplateURL];
+				if (!template) {
+					continue;
+				}
 
 				var conf = {};
 				conf.template = template;
 				conf.settings = self.settings;
 				conf.settings.namePrefix = resourceName;
-				if (resource.Properties && resource.Properties.Parameters) {
-					conf.stackParams = resource.Properties.Parameters;
-				}
+				conf.stackParams = resource.Properties.Parameters;
 				var reducer = new CfnReducer(conf);
 				var subTemplate = reducer.reduce();
 
