@@ -451,11 +451,19 @@ var CfnReducer = function (config) {
 
 		if (self.settings.reduceFnOr) {
 			var args = node['Fn::Or'];
-			var someIsTrue = args.some(function (arg) {
-				return arg === true;
+			var trues = 0;
+			var falses = 0;
+			args.forEach(function (arg) {
+				if (arg === true) {
+					++trues;
+				} else if (arg === false) {
+					++falses;
+				}
 			});
-			if (someIsTrue) {
+			if (trues > 0) {
 				newNode = true;
+			} else if (falses === args.length) {
+				newNode = false;
 			}
 		}
 
