@@ -419,11 +419,21 @@ var CfnReducer = function (config) {
 			var args = node['Fn::Join'];
 			var separator = args[0];
 			var parts = args[1];
-			var allStrings = parts.every(function (part) {
-				return self.isString(part);
-			});
-			if (allStrings) {
-				newNode = parts.join(separator);
+			if (self.isArray(parts)) {
+				if (parts.length === 0) {
+					newNode = '';
+				} else if (parts.length === 1) {
+					newNode = parts[0];
+				} else {
+					var allStrings = parts.every(function (part) {
+						return self.isString(part);
+					});
+					if (allStrings) {
+						newNode = parts.join(separator);
+					}
+				}
+			} else if (self.isString(parts)) {
+				newNode = parts;
 			}
 		}
 
