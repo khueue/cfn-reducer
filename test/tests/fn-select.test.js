@@ -39,7 +39,7 @@ test('Fn::Select', function (t) {
 		Resources: {
 			thing: {
 				'Fn::Select': [
-					1,
+					'1',
 					'value0,value1',
 				],
 			},
