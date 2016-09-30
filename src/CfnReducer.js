@@ -488,8 +488,9 @@ var CfnReducer = function (config) {
 			var args = node['Fn::Select'];
 			var index = args[0];
 			var value = args[1];
-			if (self.isString(value)) {
-				newNode = value.split(',')[index];
+			if (self.isScalar(index) && self.isString(value)) {
+				var values = value.split(',');
+				newNode = values[Number(index)];
 			}
 		}
 
