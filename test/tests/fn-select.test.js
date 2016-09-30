@@ -93,6 +93,32 @@ test('Fn::Select', function (t) {
 		Resources: {
 			thing: {
 				'Fn::Select': [
+					{
+						Ref: 'ref-for-index',
+					},
+					'value0,value1',
+				],
+			},
+		},
+	};
+
+	var reducer = new CfnReducer({
+		template: template,
+	});
+	var reduced = reducer.reduce();
+
+	var expected = template;
+
+	t.deepEqual(reduced, expected);
+});
+
+test('Fn::Select - toggled off', function (t) {
+	t.plan(1);
+
+	var template = {
+		Resources: {
+			thing: {
+				'Fn::Select': [
 					0,
 					'value0,value1',
 				],

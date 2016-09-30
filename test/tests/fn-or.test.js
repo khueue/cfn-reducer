@@ -67,6 +67,34 @@ test('Fn::Or', function (t) {
 		Resources: {
 			thing: {
 				'Fn::Or': [
+					false,
+					false,
+				],
+			},
+		},
+	};
+
+	var reducer = new CfnReducer({
+		template: template,
+	});
+	var reduced = reducer.reduce();
+
+	var expected = {
+		Resources: {
+			thing: false,
+		},
+	};
+
+	t.deepEqual(reduced, expected);
+});
+
+test('Fn::Or - toggled off', function (t) {
+	t.plan(1);
+
+	var template = {
+		Resources: {
+			thing: {
+				'Fn::Or': [
 					{
 						something: 'complicated',
 					},
