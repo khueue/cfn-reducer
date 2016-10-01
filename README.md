@@ -11,7 +11,7 @@ Because before you start using Troposphere, your CloudFormation templates can tu
 into unreadable, unverifiable JSON spaghetti. Passing parameters into your template
 can help you flatten out all the messy logic within the template, letting you generate
 specific files for different purposes (like staging/production) and put these under
-version control. It can even integrate your sub-templates back into the template.
+version control. It can even integrate your sub-templates back into the main template.
 
 
 ## Install

@@ -2,6 +2,18 @@
 
 var stableStringify = require('json-stable-stringify');
 
+function deepCopy(obj) {
+	return JSON.parse(JSON.stringify(obj));
+}
+
+function deepEqual(obj1, obj2) {
+	return stableStringify(obj1) === stableStringify(obj2);
+}
+
+function deepSort(obj) {
+	return JSON.parse(stableStringify(obj));
+}
+
 var CfnReducer = function (config) {
 	var self = this;
 
@@ -11,7 +23,7 @@ var CfnReducer = function (config) {
 		throw new Error('Requires config.template');
 	}
 
-	self.template = JSON.parse(JSON.stringify(config.template));
+	self.template = deepCopy(config.template);
 	self.template.Conditions = self.template.Conditions || {};
 	self.template.Mappings = self.template.Mappings || {};
 	self.template.Parameters = self.template.Parameters || {};
@@ -37,7 +49,6 @@ var CfnReducer = function (config) {
 		// Other:
 		tracer: undefined,
 		sortKeys: false,
-		namePrefix: undefined,
 	};
 	Object.assign(self.settings, config.settings || {});
 
@@ -51,11 +62,6 @@ var CfnReducer = function (config) {
 			wasReduced = stableStringify(reduced) !== stableStringify(self.template);
 			self.template = reduced;
 		} while (wasReduced);
-
-		if (self.settings.namePrefix) {
-			self.prefix = self.settings.namePrefix;
-			self.prefixNames();
-		}
 
 		// Reduce and integrate any sub-templates.
 		self.integrateSubTemplates();
@@ -72,7 +78,7 @@ var CfnReducer = function (config) {
 		self.cleanUpParameters();
 
 		if (self.settings.sortKeys) {
-			self.template = JSON.parse(stableStringify(self.template));
+			self.template = deepSort(self.template);
 		}
 
 		return self.template;
@@ -84,25 +90,6 @@ var CfnReducer = function (config) {
 			conditions: {},
 			mappings: {},
 		};
-	};
-
-	self.prefixNames = function () {
-		// Reduce once more, to prefix Refs and such.
-		self.template = self.reduceNode(self.template);
-
-		// Prefix all applicable top-levels.
-		self.prefixObjectKeys(self.template.Conditions, self.prefix);
-		self.prefixObjectKeys(self.template.Mappings, self.prefix);
-		self.prefixObjectKeys(self.template.Outputs, self.prefix);
-		self.prefixObjectKeys(self.template.Parameters, self.prefix);
-		self.prefixObjectKeys(self.template.Resources, self.prefix);
-	};
-
-	self.prefixObjectKeys = function (obj, prefix) {
-		for (var key in obj) {
-			obj[prefix + key] = obj[key];
-			delete obj[key];
-		}
 	};
 
 	// XXX @todo Refactor this function.
@@ -118,7 +105,7 @@ var CfnReducer = function (config) {
 				var conf = {};
 				conf.template = template;
 				conf.settings = self.settings;
-				conf.settings.namePrefix = resourceName;
+				conf.subTemplates = self.subTemplates;
 				conf.stackParams = resource.Properties.Parameters;
 				var reducer = new CfnReducer(conf);
 				var subTemplate = reducer.reduce();
@@ -142,10 +129,8 @@ var CfnReducer = function (config) {
 					self.template.Resources[key] = subTemplate.Resources[key];
 				}
 
-				// Delete old sub-template resources from main template.
-				for (key in subTemplate.Resources) {
-					delete self.template.Resources[resourceName];
-				}
+				// Delete old sub-template resource from main template.
+				delete self.template.Resources[resourceName];
 			}
 		}
 	};
@@ -241,6 +226,8 @@ var CfnReducer = function (config) {
 					return self.reduceFnEquals(node);
 				case 'Fn::FindInMap':
 					return self.reduceFnFindInMap(node);
+				case 'Fn::GetAtt':
+					return self.reduceFnGetAtt(node);
 				case 'Fn::If':
 					return self.reduceFnIf(node);
 				case 'Fn::Join':
@@ -277,8 +264,9 @@ var CfnReducer = function (config) {
 		var condName = node['Condition'];
 
 		if (self.settings.reduceConditionalResource) {
-			if (self.isBoolean(self.template.Conditions[condName])) {
-				if (self.template.Conditions[condName]) {
+			var condition = self.template.Conditions[condName];
+			if (self.isBoolean(condition)) {
+				if (condition) {
 					delete newNode['Condition'];
 				} else {
 					// Mark the resource for deletion later.
@@ -287,16 +275,7 @@ var CfnReducer = function (config) {
 			}
 		}
 
-		if (
-			self.prefix &&
-			self.isString(newNode['Condition']) &&
-			!newNode['Condition'].startsWith(self.prefix)
-		) {
-			newNode['Condition'] = self.prefix + newNode['Condition'];
-		}
-
-		self.stats.conditions[condName] = self.stats.conditions[condName] || 0;
-		++self.stats.conditions[condName];
+		self.trackCondition(condName);
 
 		self.traceReduction(node, newNode);
 		return newNode;
@@ -366,16 +345,7 @@ var CfnReducer = function (config) {
 			}
 		}
 
-		if (
-			self.prefix &&
-			self.isString(map) &&
-			!newNode['Fn::FindInMap'].startsWith(self.prefix)
-		) {
-			newNode['Fn::FindInMap'][0] = self.prefix + newNode['Fn::FindInMap'][0];
-		}
-
-		self.stats.mappings[map] = self.stats.mappings[map] || 0;
-		++self.stats.mappings[map];
+		self.trackMapping(map);
 
 		self.traceReduction(node, newNode);
 		return newNode;
@@ -388,8 +358,9 @@ var CfnReducer = function (config) {
 		var condName = args[0];
 
 		if (self.settings.reduceFnIf) {
-			if (self.isBoolean(self.template.Conditions[condName])) {
-				if (self.template.Conditions[condName]) {
+			var condition = self.template.Conditions[condName];
+			if (self.isBoolean(condition)) {
+				if (condition) {
 					newNode = args[1];
 				} else {
 					newNode = args[2];
@@ -397,16 +368,7 @@ var CfnReducer = function (config) {
 			}
 		}
 
-		if (
-			self.prefix &&
-			self.isObject(newNode) &&
-			!newNode['Fn::If'][0].startsWith(self.prefix)
-		) {
-			newNode['Fn::If'][0] = self.prefix + newNode['Fn::If'][0];
-		}
-
-		self.stats.conditions[condName] = self.stats.conditions[condName] || 0;
-		++self.stats.conditions[condName];
+		self.trackCondition(condName);
 
 		self.traceReduction(node, newNode);
 		return newNode;
@@ -498,28 +460,50 @@ var CfnReducer = function (config) {
 		return newNode;
 	};
 
+	self.reduceFnGetAtt = function (node) {
+		var newNode = node;
+
+		self.traceReduction(node, newNode);
+		return newNode;
+	};
+
 	self.reduceRef = function (node) {
 		var newNode = node;
 
 		var name = node['Ref'];
-		if (self.isDefined(self.stackParams[name])) {
+		if (self.isScalar(self.stackParams[name])) {
 			newNode = self.stackParams[name];
 		}
 
-		if (
-			self.prefix &&
-			self.isObject(newNode) &&
-			!newNode['Ref'].startsWith('AWS::') &&
-			!newNode['Ref'].startsWith(self.prefix)
-		) {
-			newNode['Ref'] = self.prefix + newNode['Ref'];
-		}
-
-		self.stats.refs[name] = self.stats.refs[name] || 0;
-		++self.stats.refs[name];
+		self.trackRef(name);
 
 		self.traceReduction(node, newNode);
 		return newNode;
+	};
+
+	self.trackCondition = function (condName) {
+		self.stats.conditions[condName] = self.stats.conditions[condName] || 0;
+		++self.stats.conditions[condName];
+	};
+
+	self.trackMapping = function (mapName) {
+		self.stats.mappings[mapName] = self.stats.mappings[mapName] || 0;
+		++self.stats.mappings[mapName];
+	};
+
+	self.trackRef = function (refName) {
+		self.stats.refs[refName] = self.stats.refs[refName] || 0;
+		++self.stats.refs[refName];
+	};
+
+	self.traceReduction = function (oldNode, newNode) {
+		if (self.settings.tracer && !deepEqual(oldNode, newNode)) {
+			self.settings.tracer.info({
+				message: 'Reducing oldNode to newNode',
+				oldNode: oldNode,
+				newNode: newNode,
+			});
+		}
 	};
 
 	self.isBoolean = function (obj) {
@@ -548,16 +532,6 @@ var CfnReducer = function (config) {
 
 	self.isScalar = function (obj) {
 		return self.isString(obj) || self.isBoolean(obj) || self.isNumber(obj);
-	};
-
-	self.traceReduction = function (oldNode, newNode) {
-		if (self.settings.tracer && stableStringify(oldNode) !== stableStringify(newNode)) {
-			self.settings.tracer.info({
-				message: 'Reducing oldNode to newNode',
-				oldNode: oldNode,
-				newNode: newNode,
-			});
-		}
 	};
 };
 
